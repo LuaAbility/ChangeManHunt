@@ -1,0 +1,7 @@
+id: 'LA-MH-RUNNER'
+type: '플레이어'
+name: '러너'
+rank: 'F'
+description: | 
+    사망 시 탈락합니다.
+    탈락 후 이 능력을 남은 무작위 플레이어에게 지급합니다.
