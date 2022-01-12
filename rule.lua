@@ -12,8 +12,6 @@ local startItem = {  -- 시작 시 지급 아이템
 }
 
 function Init()
-	math.randomseed(os.time())
-	
 	plugin.getPlugin().gameManager:setVariable("gameCount", 0)
 	plugin.getPlugin().gameManager:setVariable("isGodMode", false)
 	plugin.getPlugin().gameManager:setVariable("isLockMode", false)
@@ -114,6 +112,7 @@ function eliminate(event)
 			local players = util.getTableFromList(game.getPlayers())
 			if useChangeMethod then
 				if #players >= 2 then
+					math.randomseed(os.time())
 					local targetIndex = math.random(1, #players)
 					while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = math.random(1, #players) end
 					
@@ -183,6 +182,7 @@ function setRunner()
 	game.broadcastMessage("§2[§aLAbility§2] §a역할을 추첨합니다.")
 	
 	for i = 1, 100 do
+		math.randomseed(os.time())
 		local randomIndex = math.random(1, #players)
 		local temp = players[randomIndex]
 		players[randomIndex] = players[1]
