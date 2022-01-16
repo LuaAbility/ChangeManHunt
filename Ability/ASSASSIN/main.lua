@@ -56,7 +56,7 @@ function cancelOrKill(LAPlayer, event, ability, id)
 		if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 			if game.getPlayer(event:getDamager()):getVariable("MHASSASSIN-canMove") == false then
 				event:setCancelled(true)
-			elseif game.hasAbility(event:getEntity(), "LA-MH-RUNNER") then
+			elseif game.hasAbility(game.getPlayer(event:getEntity()), "LA-MH-RUNNER") then
 				event:setDamage(9999999)
 			end
 		end

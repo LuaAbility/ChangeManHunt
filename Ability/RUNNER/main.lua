@@ -40,8 +40,8 @@ function shuffle(player)
 	if plugin.getPlugin().gameManager:getVariable("useChangeMethod") == true then 
 		math.randomseed(os.time())
 		local players = util.getTableFromList(game.getPlayers())
-		local targetIndex = math.random(1, #players)
-		while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = math.random(1, #players) end
+		local targetIndex = util.random(1, #players)
+		while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = util.random(1, #players) end
 		
 		util.runLater(function() 
 			game.removeAbilityAsID(player, "LA-MH-RUNNER") 
@@ -53,8 +53,8 @@ function shuffle(player)
 			game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
 			game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
 		
-			local newTargetIndex = math.random(1, #players)
-			while #util.getTableFromList(players[newTargetIndex]:getAbility()) > 0 do newTargetIndex = math.random(1, #players) end
+			local newTargetIndex = util.random(1, #players)
+			while game.hasAbility(players[newTargetIndex], "LA-MH-ASSASSIN") and game.hasAbility(players[newTargetIndex], "LA-MH-RUNNER") do newTargetIndex = util.random(1, #players) end
 		
 			util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)
 		end

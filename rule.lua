@@ -84,7 +84,7 @@ function giveItemToAll(clearInv)
 end
 
 function giveItem(player, clearInv)
-	if game.getPlayer(player).isSurvive then 
+	if game.getPlayer(player) ~= nil and game.getPlayer(player).isSurvive then 
 		game.sendMessage(player, "§2[§aLAbility§2] §a기본 아이템을 지급받습니다.")
 		if clearInv then player:getInventory():clear() end
 		player:getInventory():addItem(startItem)
@@ -105,37 +105,39 @@ end
 
 function eliminate(event)
 	if event:getEntity():getType():toString() == "PLAYER" then
-		if game.hasAbility(game.getPlayer(event:getEntity()), "LA-MH-RUNNER") then
-			event:getEntity():getWorld():strikeLightningEffect(event:getEntity():getLocation())
-			game.eliminatePlayer(game.getPlayer(event:getEntity()))
-			
-			local players = util.getTableFromList(game.getPlayers())
-			if useChangeMethod then
-				if #players >= 2 then
-					math.randomseed(os.time())
-					local targetIndex = math.random(1, #players)
-					while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = math.random(1, #players) end
+		if game.getPlayer(event:getEntity()) ~= nil then
+			if game.hasAbility(game.getPlayer(event:getEntity()), "LA-MH-RUNNER") then
+				event:getEntity():getWorld():strikeLightningEffect(event:getEntity():getLocation())
+				game.eliminatePlayer(game.getPlayer(event:getEntity()))
+				
+				local players = util.getTableFromList(game.getPlayers())
+				if useChangeMethod then
+					if #players >= 2 then
+						math.randomseed(os.time())
+						local targetIndex = util.random(1, #players)
+						while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = util.random(1, #players) end
 					
-					util.runLater(function() game.addAbility(players[targetIndex], "LA-MH-RUNNER") end, 1)
-					if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN") then
-						util.runLater(function() game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN") end, 1)
-						game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
-						game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
+						util.runLater(function() game.addAbility(players[targetIndex], "LA-MH-RUNNER") end, 1)
+						if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN") then
+							util.runLater(function() game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN") end, 1)
+							game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
+							game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
 					
-						local newTargetIndex = math.random(1, #players)
-						while #util.getTableFromList(players[newTargetIndex]:getAbility()) > 0 do newTargetIndex = math.random(1, #players) end
+							local newTargetIndex = util.random(1, #players)
+							while #util.getTableFromList(players[newTargetIndex]:getAbility()) > 0 do newTargetIndex = util.random(1, #players) end
 					
-						util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)
+							util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)
+						end
+					else 
+						game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
+						game.broadcastMessage("§6[§eLAbility§6] §b" .. players[1]:getPlayer():getName() .. " §e님이 우승했습니다!")
+						game.endGame()
 					end
 				else 
 					game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-					game.broadcastMessage("§6[§eLAbility§6] §b" .. players[1]:getPlayer():getName() .. " §e님이 우승했습니다!")
+					game.broadcastMessage("§6[§eLAbility§6] §c헌터§e 팀이 우승했습니다!")
 					game.endGame()
 				end
-			else 
-				game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-				game.broadcastMessage("§6[§eLAbility§6] §c헌터§e 팀이 우승했습니다!")
-				game.endGame()
 			end
 		end
 	end
@@ -183,7 +185,7 @@ function setRunner()
 	
 	for i = 1, 100 do
 		math.randomseed(os.time())
-		local randomIndex = math.random(1, #players)
+		local randomIndex = util.random(1, #players)
 		local temp = players[randomIndex]
 		players[randomIndex] = players[1]
 		players[1] = temp
