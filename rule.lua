@@ -98,7 +98,7 @@ function cancelDamage(event)
 end
 
 function cancelMove(event)
-	if not game.hasAbility(game.getPlayer(event:getPlayer()), "LA-MH-RUNNER") then
+	if not game.hasAbility(game.getPlayer(event:getPlayer()), "LA-MH-RUNNER-HIDDEN") then
 		event:setCancelled(true)
 	end
 end
@@ -106,7 +106,7 @@ end
 function eliminate(event)
 	if event:getEntity():getType():toString() == "PLAYER" then
 		if game.getPlayer(event:getEntity()) ~= nil then
-			if game.hasAbility(game.getPlayer(event:getEntity()), "LA-MH-RUNNER") then
+			if game.hasAbility(game.getPlayer(event:getEntity()), "LA-MH-RUNNER-HIDDEN") then
 				event:getEntity():getWorld():strikeLightningEffect(event:getEntity():getLocation())
 				game.eliminatePlayer(game.getPlayer(event:getEntity()))
 				
@@ -115,18 +115,18 @@ function eliminate(event)
 					if #players >= 2 then
 						math.randomseed(os.time())
 						local targetIndex = util.random(1, #players)
-						while game.hasAbility(players[targetIndex], "LA-MH-RUNNER") do targetIndex = util.random(1, #players) end
+						while game.hasAbility(players[targetIndex], "LA-MH-RUNNER-HIDDEN") do targetIndex = util.random(1, #players) end
 					
-						util.runLater(function() game.addAbility(players[targetIndex], "LA-MH-RUNNER") end, 1)
-						if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN") then
-							util.runLater(function() game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN") end, 1)
+						util.runLater(function() game.addAbility(players[targetIndex], "LA-MH-RUNNER-HIDDEN") end, 1)
+						if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN-HIDDEN") then
+							util.runLater(function() game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN-HIDDEN") end, 1)
 							game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
 							game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
 					
 							local newTargetIndex = util.random(1, #players)
 							while #util.getTableFromList(players[newTargetIndex]:getAbility()) > 0 do newTargetIndex = util.random(1, #players) end
 					
-							util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)
+							util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN-HIDDEN") end, 1)
 						end
 					else 
 						game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
@@ -147,7 +147,7 @@ function dragonKill(event)
 	if event:getEntity():getType():toString() == "ENDER_DRAGON" then
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
-			if not game.hasAbility(players[i], "LA-MH-RUNNER") then 
+			if not game.hasAbility(players[i], "LA-MH-RUNNER-HIDDEN") then 
 				players[i]:getPlayer():setHealth(0)
 				players[i]:getPlayer():getWorld():strikeLightningEffect(players[i]:getPlayer():getLocation())
 			else 
@@ -193,8 +193,8 @@ function setRunner()
 	
 	local count = 1
 	
-	util.runLater(function() game.addAbility(players[1], "LA-MH-RUNNER") end, 1)
-	if useAssassin then util.runLater(function() game.addAbility(players[2], "LA-MH-ASSASSIN") end, 1) end
+	util.runLater(function() game.addAbility(players[1], "LA-MH-RUNNER-HIDDEN") end, 1)
+	if useAssassin then util.runLater(function() game.addAbility(players[2], "LA-MH-ASSASSIN-HIDDEN") end, 1) end
 end
 
 function changeGamemode()
@@ -218,7 +218,7 @@ function checkDirection()
 	local hunterList = {}
 	
 	for i = 1, #players do
-		if game.hasAbility(players[i], "LA-MH-RUNNER") then table.insert(runnerList, players[i])
+		if game.hasAbility(players[i], "LA-MH-RUNNER-HIDDEN") then table.insert(runnerList, players[i])
 		else table.insert(hunterList, players[i]) end
 	end
 
@@ -228,7 +228,7 @@ function checkDirection()
 			local distance = 99999999
 			local targetIndex = 0
 			
-			if game.hasAbility(players[i], "LA-MH-RUNNER") then
+			if game.hasAbility(players[i], "LA-MH-RUNNER-HIDDEN") then
 				for j = 1, #hunterList do 
 					if players[i]:getPlayer():getWorld():getEnvironment() == hunterList[j]:getPlayer():getWorld():getEnvironment() then
 						local checkDistance = players[i]:getPlayer():getLocation():distance(hunterList[j]:getPlayer():getLocation())

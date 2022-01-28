@@ -45,19 +45,22 @@ function shuffle(player)
 		
 		util.runLater(function() 
 			game.removeAbilityAsID(player, "LA-MH-RUNNER") 
-			game.addAbility(players[targetIndex], "LA-MH-RUNNER")
+			game.addAbility(players[targetIndex], "LA-MH-RUNNER") 
+		
+			if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN") then
+				util.runLater(function() 
+					game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN") 
+					
+					game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
+					game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
+					
+					local newTargetIndex = util.random(1, #players)
+					while game.hasAbility(players[newTargetIndex], "LA-MH-ASSASSIN") and game.hasAbility(players[newTargetIndex], "LA-MH-RUNNER") do newTargetIndex = util.random(1, #players) end
+			
+					util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)	
+				end, 1)
+			end
 		end, 1)
-		
-		if game.hasAbility(players[targetIndex], "LA-MH-ASSASSIN") then
-			util.runLater(function() game.removeAbilityAsID(players[targetIndex], "LA-MH-ASSASSIN") end, 1)
-			game.broadcastMessage("§2[§aLAbility§2] §a어쌔신이 러너가 되었습니다!")
-			game.broadcastMessage("§2[§aLAbility§2] §a어쌔신을 재추첨합니다.")
-		
-			local newTargetIndex = util.random(1, #players)
-			while game.hasAbility(players[newTargetIndex], "LA-MH-ASSASSIN") and game.hasAbility(players[newTargetIndex], "LA-MH-RUNNER") do newTargetIndex = util.random(1, #players) end
-		
-			util.runLater(function() game.addAbility(players[newTargetIndex], "LA-MH-ASSASSIN") end, 1)
-		end
 	end
 end
 

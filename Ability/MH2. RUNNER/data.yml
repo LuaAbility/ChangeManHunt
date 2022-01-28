@@ -1,5 +1,5 @@
-id: 'LA-MH-RUNNER'
-type: '플레이어'
+id: 'LA-MH-RUNNER-HIDDEN'
+type: '스피드러너'
 name: '러너'
 rank: 'F'
 description: | 
