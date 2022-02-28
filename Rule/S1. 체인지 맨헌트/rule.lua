@@ -23,6 +23,8 @@ function Init()
 	plugin.abilityItemOption(false, material.IRON_INGOT)
 	plugin.abilityCheckOption(true)
 	plugin.cooldownMultiplyOption(1.0)
+	plugin.setResourcePackPort(13356)
+	plugin.getPlugin().useResourcePack = false
 
 	plugin.registerRuleEvent("EntityDamageEvent", "godMode")
 	plugin.registerRuleEvent("PlayerMoveEvent", "lockMode")
